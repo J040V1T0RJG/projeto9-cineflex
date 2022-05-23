@@ -6,8 +6,6 @@ import { useParams, Link } from "react-router-dom";
 
 export default function Movies () {
     const [movies, setMovies] = React.useState([]);
-    const params = useParams();
-    console.log("parametros", params);
 
     useEffect(() => {
         const promise = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies")
@@ -15,9 +13,6 @@ export default function Movies () {
             setMovies(...movies, response.data)
         });
     }, [])     
-    console.log(movies)
-
-    
 
     function test (index) {
         console.log("testei", index)
@@ -26,16 +21,14 @@ export default function Movies () {
     function RenderMovies (props) {
         return (
             <>
-                <img src={props.image} onClick={props.click} ></img>
+                <div className="flame">
+                    <img src={props.image} onClick={props.click} ></img>
+                </div>
+                
             </>
         )
     }
-
    
-    
-    
-    
-    
     
     return (
         <>
@@ -46,10 +39,7 @@ export default function Movies () {
                          console.log("index", index),
                         <Link to={`sessoes/${movie.id}`}> 
                             <RenderMovies key={index} image={movies[index].posterURL} click={() => test(index)}/>
-                           
                         </Link>
-                        
-                        
                     ))}
                 </div>
             </MoviesStyle>
@@ -62,8 +52,28 @@ const MoviesStyle = styled.div`
     flex-wrap: wrap;
     justify-content: center;
 
+    .flame{
+        width: 145px;
+        height: 209px;
+
+        background-color: #FFFFFF;
+        box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+        border-radius: 3px; 
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-bottom: 10px;
+    }
+
     .organizate {
-        width: 260px;
+        width: 360px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+
     }
     
     img {

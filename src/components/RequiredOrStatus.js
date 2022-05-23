@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-export default function RequiredOrStatus () {
+export default function RequiredOrStatus ({requiredOrStatusP, requiredOrStatusClass}) {
     return (
         <>
             <RequiredOrStatusStyle>
-                <p className="normal">Selecione o filme</p>
+                <p className={requiredOrStatusClass}>{requiredOrStatusP}</p>
             </RequiredOrStatusStyle>
         </>
         

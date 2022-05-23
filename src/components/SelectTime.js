@@ -1,25 +1,128 @@
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import axios from "axios"
 import React, { useEffect } from "react"
+import styled from "styled-components"
+import Footer from "./Footer"
 
-export default function SelectTime () {
+
+export default function SelectTime ({setRequiredOrStatusP, setRequestData, requestData}) {
+    console.log("requestdataSELCTTIME", requestData)
+    setRequiredOrStatusP("Selecione o horário")
     const params = useParams()
-    const [movieTime, setMovieTime] = React.useState([])
-
-    console.log(params)
-    console.log("parametros menos 1", params.idFilme - 1)
+    const [movieTimes, setMovieTimes] = React.useState([]);
+    const [dataMovies, setDataMovies] = React.useState([]);
+    const [name, setName] = React.useState("");
+    const [image, setImage] = React.useState("")
 
     useEffect(() => {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${params.idFilme - 1}/showtimes`)
+        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${params.idFilme}/showtimes`)
         promise.then(response => {
-            setMovieTime(...movieTime, response.data)
+            setMovieTimes(...movieTimes, response.data.days)
+            setDataMovies(...dataMovies, response.data)
+            setName(response.data.title)
+            setImage(response.data.posterURL)
+            setRequestData([...requestData, response.data.title, response.data.posterURL])
         });
     },[])
-    console.log("movieTme=", movieTime)
+    console.log("movieTimes", movieTimes)
+    console.log("data", dataMovies)
+    console.log("data.title", name)
+    console.log("img", image)
+
+
+
+
+    function RenderTimes (props) {
+        function saveDataFirst () {
+            setRequestData([...requestData, props.weekday, props.firstSession])
+        }
+        function saveDataSecond () {
+            setRequestData([...requestData, props.weekday, props.secondSession])
+        }
+
+        return (
+            <>
+                <p>{props.weekday} - {props.date}</p>
+                <div className="organizate">
+                    <Link to={`/assentos/${props.paramsId0}`}>
+                        <div className="button" onClick={() => saveDataFirst()}><p>{props.firstSession}</p></div>
+                    </Link>
+                    <Link to={`/assentos/${props.paramsId1}`}>
+                        <div className="button" onClick={() => saveDataSecond()}><p>{props.secondSession}</p></div>    
+                    </Link>   
+                </div>
+            </>
+        )
+    }
 
     return (
         <>
-            <div>selecionando horario</div>
+            <SelectTimeStyle>
+                <div>
+                    {movieTimes.map( (time, index) => (
+                        <RenderTimes 
+                            weekday={time.weekday} 
+                            date={time.date} 
+                            firstSession={time.showtimes[0].name} 
+                            secondSession={time.showtimes[1].name}
+                            paramsId0={time.showtimes[0].id}
+                            paramsId1={time.showtimes[1].id}
+                        />   
+                    ))}
+                </div>
+            </SelectTimeStyle>
+            <Footer name={name} image={image}/>
         </>
     )
 }
+
+const SelectTimeStyle = styled.div`
+    display: flex;
+
+    p {
+        height: 35px;
+
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 23px;
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.02em;
+        margin-left: 24px;
+
+        color: #293845;
+    }
+    .organizate {
+        display: flex;
+        margin-left: 24px;
+        margin-top: 22px;
+        margin-bottom: 22px;
+    }
+    .button {
+        width: 83px;
+        height: 43px;
+
+        background-color: #E8833A;
+        border-radius: 3px;
+        margin-right: 10px;
+    }
+
+    .button p{
+        height: 43px;
+
+        font-family: 'Roboto';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 21px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        letter-spacing: 0.02em;
+
+        color: #FFFFFF;
+    }
+
+`
