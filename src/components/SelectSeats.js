@@ -5,7 +5,12 @@ import styled from "styled-components";
 import Footer from "./Footer";
 
 export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequestData}) {
-    console.log("requestdataSELECTSEATS", requestData)
+
+    let arrayObject = {
+        idGeral: [],
+        idSeat: []
+    }
+
     setRequiredOrStatusP("Selecione o(s) assento(s)")
     const params = useParams();
     const [seats, setSeats] = React.useState([]);
@@ -21,13 +26,8 @@ export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequ
             setSeats(...seats, response.data.seats);
             setName(response.data.title)
             setImage(response.data.posterURL)
-            console.log("response.data",response.data)
         });
     },[]);
-
-/**/    console.log("seats", seats)
-
-
 
     function SeatInputsBottom () {
         return (
@@ -59,7 +59,8 @@ export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequ
     }
 
     function submitData () {
-
+        setRequestData([...requestData, arrayObject])
+        axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many")
     }
 
 
@@ -79,7 +80,7 @@ export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequ
         }
 
         function selectphase1 () {
-            if(!(props.falseOrTrue)) {
+            if((props.falseOrTrue)) {
                 if (!selectColor) {
                     setSelectColor(true)
                 }
@@ -93,8 +94,9 @@ export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequ
         }
 
         function selectPhase2 () {
-            if(!(props.falseOrTrue) && !requestData.includes(props.id)) {
-                setRequestData([...requestData, props.id])
+            if((props.falseOrTrue) && !requestData.includes(props.id)) {
+                arrayObject.idGeral.push(props.id)
+                arrayObject.idSeat.push(props.seatNumber)  
             }
         }
 
@@ -110,7 +112,7 @@ export default function SelectSeats ({setRequiredOrStatusP, requestData, setRequ
             <SelectSeatsStyle>
                 <div className="seats"> 
                     {seats.map((seat, index) => (
-                        <RenderSeats key={index} id={seat.id} seatNumber={seat.name} reserved={!(seat.isAvailable) ? "" : "yellow"} falseOrTrue={seat.isAvailable}/>
+                        <RenderSeats key={index} id={seat.id} seatNumber={seat.name} reserved={(seat.isAvailable) ? "" : "yellow"} falseOrTrue={seat.isAvailable}/>
                     ))}
                 </div>
                     <SeatInputsBottom />

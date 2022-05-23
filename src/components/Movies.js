@@ -7,16 +7,28 @@ import { useParams, Link } from "react-router-dom";
 export default function Movies () {
     const [movies, setMovies] = React.useState([]);
 
+/*
+    let abc = {
+        primeiro: "aaa",
+        segund0: "bbb"
+    }
+    const [acd, setAcd] = React.useState(["hello word"]) 
+    console.log(acd)
+
+    
+
+  console.log(acd[1]?.primeiro)
+        setAcd([...acd, abc])
+
+*/
+
     useEffect(() => {
         const promise = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies")
+  
         promise.then(response => {
             setMovies(...movies, response.data)
         });
     }, [])     
-
-    function test (index) {
-        console.log("testei", index)
-    }
 
     function RenderMovies (props) {
         return (
@@ -28,17 +40,14 @@ export default function Movies () {
             </>
         )
     }
-   
     
     return (
         <>
             <MoviesStyle>
                 <div className="organizate">
                     {movies.map( (movie, index) => (
-                         console.log("movie.id", movie.id),
-                         console.log("index", index),
                         <Link to={`sessoes/${movie.id}`}> 
-                            <RenderMovies key={index} image={movies[index].posterURL} click={() => test(index)}/>
+                            <RenderMovies key={index} image={movies[index].posterURL}/>
                         </Link>
                     ))}
                 </div>

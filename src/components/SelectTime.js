@@ -6,7 +6,6 @@ import Footer from "./Footer"
 
 
 export default function SelectTime ({setRequiredOrStatusP, setRequestData, requestData}) {
-    console.log("requestdataSELCTTIME", requestData)
     setRequiredOrStatusP("Selecione o horário")
     const params = useParams()
     const [movieTimes, setMovieTimes] = React.useState([]);
@@ -24,13 +23,6 @@ export default function SelectTime ({setRequiredOrStatusP, setRequestData, reque
             setRequestData([...requestData, response.data.title, response.data.posterURL])
         });
     },[])
-    console.log("movieTimes", movieTimes)
-    console.log("data", dataMovies)
-    console.log("data.title", name)
-    console.log("img", image)
-
-
-
 
     function RenderTimes (props) {
         function saveDataFirst () {

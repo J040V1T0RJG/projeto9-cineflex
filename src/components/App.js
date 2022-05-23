@@ -23,7 +23,7 @@ export default function App () {
                     <Route path="/" element={<Movies />}/>
                     <Route path="/sessoes/:idFilme" element={<SelectTime setRequiredOrStatusP={setRequiredOrStatusP} requestData={requestData} setRequestData={setRequestData}/>}/>
                     <Route path="/assentos/:idSessao" element={<SelectSeats setRequiredOrStatusP={setRequiredOrStatusP} requestData={requestData} setRequestData={setRequestData}/>}/>
-                    <Route path="/sucesso" element={<Success setRequiredOrStatusP={setRequiredOrStatusP} setRequiredOrStatusClass={setRequiredOrStatusClass}/>}/>
+                    <Route path="/sucesso" element={<Success setRequiredOrStatusP={setRequiredOrStatusP} setRequiredOrStatusClass={setRequiredOrStatusClass} requestData={requestData}/>}/>
                 </Routes>  
             </BrowserRouter>
                 
